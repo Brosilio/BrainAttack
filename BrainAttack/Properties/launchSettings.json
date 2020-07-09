@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "BrainAttack": {
+      "commandName": "Project",
+      "commandLineArgs": "bf/mandelbrot.b"
+    }
+  }
+}
