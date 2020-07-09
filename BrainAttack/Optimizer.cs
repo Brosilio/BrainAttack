@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using static BrainAttack.BfInstruction;
 
 namespace BrainAttack
@@ -40,8 +38,9 @@ namespace BrainAttack
 					case RBK:
 					case PER:
 					case COM:
+					case EXT_ZRO:
 						outputList.Add(c);
-						countList.Add(0-1);
+						countList.Add(-1);
 						continue;
 				}
 			}
@@ -54,7 +53,7 @@ namespace BrainAttack
 
 		public static void MatchLoops(ref byte[] prog, ref int[] args)
 		{
-			bool matched = false;
+			bool matched;
 			do
 			{
 				matched = MatchNextBracketPair(ref prog, ref args);
@@ -63,13 +62,8 @@ namespace BrainAttack
 
 		private static bool MatchNextBracketPair(ref byte[] prog, ref int[] args)
 		{
-			int depth = 0;
-
-			bool foundFirst = false;
-			int firstIndex = 0;
-
-			bool foundLast = false;
-			int lastIndex = 0;
+			int depth = 0, firstIndex = 0, lastIndex = 0;
+			bool foundFirst = false, foundLast = false;
 
 			for (int i = 0; i < prog.Length; i++)
 			{

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace BrainAttack
+﻿namespace BrainAttack
 {
 	public static class BfInstruction
 	{
@@ -15,7 +11,7 @@ namespace BrainAttack
 		public const byte PER = (byte)'.';
 		public const byte COM = (byte)',';
 
-		public const byte ZRO = 0x00;
-
+		public const byte EXT_ZRO = (byte)'#';
+		public const byte EXT_CPY = 0xFD;
 	}
 }
