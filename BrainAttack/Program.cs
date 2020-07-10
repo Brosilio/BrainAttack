@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 
 namespace BrainAttack
@@ -16,7 +17,12 @@ namespace BrainAttack
 			Console.WriteLine($"->> TARGET: {args[0]}");
 
 			byte[] rom = File.ReadAllBytes(args[0]);
-			new Brain(ref rom).Fuck();
+			Stopwatch sw = new Stopwatch();
+
+			sw.Start();
+			new Brain(ref rom).AdvancedThink();
+			sw.Stop();
+			Console.WriteLine($"Time: {sw.Elapsed.TotalMilliseconds}");
 		}
 	}
 }

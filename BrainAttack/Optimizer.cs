@@ -5,7 +5,7 @@ namespace BrainAttack
 {
 	public static class Optimizer
 	{
-		public static int RLE(ref byte[] input, ref byte[] output, ref int[] counts)
+		public static int RLE(ref byte[] input, ref byte[] output, ref int[] args)
 		{
 			int cnt = 1;
 
@@ -46,7 +46,7 @@ namespace BrainAttack
 			}
 
 			output = outputList.ToArray();
-			counts = countList.ToArray();
+			args = countList.ToArray();
 
 			return output.Length;
 		}
@@ -56,55 +56,50 @@ namespace BrainAttack
 			bool matched;
 			do
 			{
-				matched = MatchNextBracketPair(ref prog, ref args);
+				int depth = 0, firstIndex = 0, lastIndex = 0;
+				bool foundFirst = false, foundLast = false;
+
+				for (int i = 0; i < prog.Length; i++)
+				{
+					switch (prog[i])
+					{
+						case LBK:
+							if (args[i] != -1)
+								continue;
+
+							depth++;
+
+							if (!foundFirst)
+							{
+								foundFirst = true;
+								firstIndex = i;
+							}
+							break;
+
+						case RBK:
+							if (args[i] != -1)
+								continue;
+
+							depth--;
+
+							if (depth == 0)
+							{
+								foundLast = true;
+								lastIndex = i;
+							}
+							break;
+					}
+
+					if (foundFirst && foundLast)
+					{
+						args[firstIndex] = lastIndex;
+						args[lastIndex] = firstIndex;
+						break;
+					}
+				}
+
+				matched = foundFirst && foundLast;
 			} while (matched);
-		}
-
-		private static bool MatchNextBracketPair(ref byte[] prog, ref int[] args)
-		{
-			int depth = 0, firstIndex = 0, lastIndex = 0;
-			bool foundFirst = false, foundLast = false;
-
-			for (int i = 0; i < prog.Length; i++)
-			{
-				switch (prog[i])
-				{
-					case LBK:
-						if (args[i] != -1)
-							continue;
-
-						depth++;
-
-						if (!foundFirst)
-						{
-							foundFirst = true;
-							firstIndex = i;
-						}
-						break;
-
-					case RBK:
-						if (args[i] != -1)
-							continue;
-
-						depth--;
-
-						if (depth == 0)
-						{
-							foundLast = true;
-							lastIndex = i;
-						}
-						break;
-				}
-
-				if (foundFirst && foundLast)
-				{
-					args[firstIndex] = lastIndex;
-					args[lastIndex] = firstIndex;
-					break;
-				}
-			}
-
-			return foundFirst && foundLast;
 		}
 	}
 }
